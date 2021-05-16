@@ -3,6 +3,8 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const mongoURL = require('./config/').mongoURL
 
+const user = require('./src/routes/userRoute')
+
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -24,6 +26,7 @@ app.get('/', (req, res) => {
     res.send("test")
 })
 
+app.use('/user', user)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)
