@@ -57,7 +57,7 @@ const profileSchema = new Schema({
         required: false
     },
 
-    Instagram: {
+    instagram: {
         type: String,
         required: false
     }

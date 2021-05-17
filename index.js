@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const mongoURL = require('./config/').mongoURL
 
 const user = require('./src/routes/userRoute')
+const profile = require('./src/routes/profileRoute')
 
 const app = express()
 
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/user', user)
+app.use('/profile', profile)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)
