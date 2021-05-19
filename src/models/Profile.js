@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const profileSchema = new Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "user"
+    },
+
     career: {
         type: String,
         required: true
@@ -60,7 +65,42 @@ const profileSchema = new Schema({
     instagram: {
         type: String,
         required: false
-    }
+    },
+    experience: [
+        {
+            jobTitle: {
+                type: String,
+                required: true
+            },
+        
+            company: {
+                type: String,
+                required: true 
+            },
+        
+            location: {
+                type: String,
+                required: false 
+            },
+        
+            fromDate: {
+                type: String,
+                required: false 
+            },
+        
+            toDate: {
+                type: String,
+                required: false 
+            },
+        
+            jobDescription: {
+                type: String,
+                required: false
+            },
+            
+        }
+    ],
+    
 }) 
 
 const profile = mongoose.model("profile", profileSchema)

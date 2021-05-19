@@ -4,7 +4,9 @@ const mongoose = require('mongoose')
 const mongoURL = require('./config/').mongoURL
 
 const user = require('./src/routes/userRoute')
+const auth = require('./src/routes/authRoute')
 const profile = require('./src/routes/profileRoute')
+const experience = require('./src/routes/experienceRoute')
 
 const app = express()
 
@@ -21,14 +23,16 @@ mongoose.connect(mongoURL, {
     console.log(`ERROR: ${error.message}`);
 })
 
-const PORT =  process.env.PORT || 7000
+const PORT =  process.env.PORT || 1234
 
 app.get('/', (req, res) => {
     res.send("test")
 })
 
 app.use('/user', user)
+app.use('/auth', auth)
 app.use('/profile', profile)
+app.use('/experience', experience)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)

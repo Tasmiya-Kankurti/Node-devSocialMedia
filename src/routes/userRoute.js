@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
+const Profile = require('../models/Profile')
+const isLoggedIn = require('../middleware')
 
 router.get('/', (req, res) => {
     User.find().then((data) => {
@@ -42,10 +44,13 @@ router.post('/createuser', (req, res) => {
 })
 
 
-router.delete('/deleteuser', (req, res) => {
+router.delete('/deleteuser', isLoggedIn, (req, res) => {
     User.remove({_id: req.body.id}).then((data) => {
-        res.send({
-            message:"User account deleted successfully!"
+        Profile.remove({userId: req.body.id}).then((pdata) => {
+            // console.log(pdata)
+            res.send({
+                message:"User account deleted successfully!"
+            })
         })
     }).catch((error) => {
         res.send({
@@ -68,10 +73,10 @@ router.put('/forgetpassword', (req,res) => {
     ).then((data) => {
         res.send({
             message: "Password updated successfully!"
-        }).catch((error) => {
-            res.send({
-                message: error.message
-            })
+        })
+    }).catch((error) => {
+        res.send({
+            message: error.message
         })
     })
 })

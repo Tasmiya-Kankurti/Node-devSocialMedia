@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Profile = require('../models/Profile')
+const isLoggedIn = require('../middleware')
 
 router.get('/', (req, res) => {
     Profile.find().then((data) => {
@@ -13,14 +14,15 @@ router.get('/', (req, res) => {
 
 })
 
-router.post('/createprofile', (req, res) => {
-    Profile.findOne({email: req.body.email}).then((data) => {
+router.post('/createprofile', isLoggedIn, (req, res) => {
+    Profile.findOne({userId: req.body.userId}).then((data) => {
         if(data){
             res.send({
-                message: "User have already created hi profile, you can update it..."
+                message: "User have already created profile, you can update it..."
             })
         } else {
             const profile = new Profile({
+                userId: req.body.id,
                 career: req.body.career,
                 work: req.body.work,
                 companyWebsite: req.body.companyWebsite,
@@ -52,7 +54,7 @@ router.post('/createprofile', (req, res) => {
     })
 })
 
-router.put('/updateprofile', (req, res) => {
+router.put('/updateprofile', isLoggedIn, (req, res) => {
     Profile.updateOne(
         {
             _id: req.body.id
@@ -63,11 +65,14 @@ router.put('/updateprofile', (req, res) => {
             }
         }
     ).then((data) => {
-        Profile.findOne({_id: req.body.id}).then((data) => {
-            if(data !== null)
+        Profile.findOne({_id: req.body.id}).then((value) => {
+            console.log(value)
+            if(value !== null)
                 res.send({
                     message: "Profile updated successfully!"
                 })
+            else
+                console.log("Hello")
         }).catch((error) => {
             res.send({
                 message: error.message     
@@ -79,5 +84,6 @@ router.put('/updateprofile', (req, res) => {
         })
     })
 })
+
 
 module.exports = router
