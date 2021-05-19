@@ -4,20 +4,17 @@ const Profile = require('../models/Profile')
 const isLoggedIn = require('../middleware')
 const user = require('../models/User')
 
-router.put('/addexperience', isLoggedIn, (req, res) => {
+router.put('/addeducation', isLoggedIn, (req, res) => {
     Profile.findOne({userId: req.body.userId}).then((data) => {
         if(data){
-            data.experience.push({
-                jobTitle: req.body.jobTitle,
-                company: req.body.company,
-                location: req.body.location,
-                fromDate: req.body.fromDate,
-                toDate: req.body.toDate,
-                jobDescription: req.body.jobDescription
+            data.education.push({
+                school: req.body.school,
+                degree: req.body.degree,
+                years: req.body.years
             })
             data.save().then((data) => {
                 res.send({
-                    message: "experience added successfully!",
+                    message: "education added successfully!",
                     ...data._doc
                 } )
             }).catch((error) => {
@@ -38,27 +35,17 @@ router.put('/addexperience', isLoggedIn, (req, res) => {
 })
 
 
-router.delete('/deleteexperience', isLoggedIn, (req, res) => {
+router.delete('/deleteeducation', isLoggedIn, (req, res) => {
     Profile.findOne({userId: req.body.userId}).then((data) => {
         if(data){
-            // console.log("expID: "+req.body.expId)
-            // data.experience.map((traceUser,i) => {
-                
-            //     console.log("tracer: "+traceUser._id)
-            //     if(req.body.expId === traceUser._id.toString()){
-            //         console.log("Inside if ")
-            //         data.experience.splice(i, 1); 
-            //     }
-                    
-            // })
-
-            data.experience = data.experience.filter((experience) => {
-                return req.body.expId !== experience._id.toString() 
+            
+            data.education = data.education.filter((education) => {
+                return req.body.eduId !== education._id.toString() 
             })
 
             data.save().then((data) => {
                 res.send({
-                    message: "Experience deleted successfully!",
+                    message: "Education deleted successfully!",
                     ...data._doc
                 })
             }).catch((error) => {

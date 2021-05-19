@@ -7,6 +7,7 @@ const user = require('./src/routes/userRoute')
 const auth = require('./src/routes/authRoute')
 const profile = require('./src/routes/profileRoute')
 const experience = require('./src/routes/experienceRoute')
+const education = require('./src/routes/educationRoute')
 
 const app = express()
 
@@ -33,6 +34,7 @@ app.use('/user', user)
 app.use('/auth', auth)
 app.use('/profile', profile)
 app.use('/experience', experience)
+app.use('/education', education)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)

@@ -100,6 +100,26 @@ const profileSchema = new Schema({
             
         }
     ],
+
+    education: [
+        {
+
+            school: {
+                type: String,
+                required: true
+            },
+
+            degree: {
+                type: String,
+                required: true
+            },
+
+            years: {
+                type: String,
+                required: true
+            }
+        }
+    ]
     
 }) 
 
