@@ -11,7 +11,6 @@ const education = require('./src/routes/educationRoute')
 const post = require('./src/routes/postRoute')
 const discussion = require('./src/routes/discussionRoute')
 const likes = require('./src/routes/likeRoute')
-const dislikes = require('./src/routes/dislikeRoute')
 
 const app = express()
 
@@ -42,7 +41,6 @@ app.use('/api/education', education)
 app.use('/api/post', post)
 app.use('/api/discussion', discussion)
 app.use('/api/likes', likes)
-app.use('/api/dislikes', dislikes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)

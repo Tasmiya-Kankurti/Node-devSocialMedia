@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 const Profile = require('../models/Profile')
+const Post = require('../models/Post')
 const isLoggedIn = require('../middleware')
 const gravatar = require('gravatar')
 const normalize =require('normalize-url')
@@ -9,12 +10,24 @@ const normalize =require('normalize-url')
 router.get('/', (req, res) => {
     User.find().then((data) => {
         res.send(data)
-    }).catch((eroor) => {
+    }).catch((error) => {
         res.send({
             message: error.messge,
         })
         
     })
+})
+
+router.get('/myaccount', isLoggedIn, (req, res) => {
+    User.findOne({_id: req.body.id}).select('-password').then((data) => {
+        console.log(data)
+        res.send(data)
+    }).catch((error) => {
+        res.send({
+            message: error.message
+        })
+    })
+
 })
 
 router.post('/createuser', (req, res) => {
@@ -58,9 +71,19 @@ router.post('/createuser', (req, res) => {
 router.delete('/deleteuser', isLoggedIn, (req, res) => {
     User.remove({_id: req.body.id}).then((data) => {
         Profile.remove({userId: req.body.id}).then((pdata) => {
-            // console.log(pdata)
+            Post.remove({userId: req.body.id}).then((tdata) => {
+                // console.log(pdata)
+                res.send({
+                    message:"User account deleted successfully!"
+                })
+            }).catch((error) => {
+                res.send({
+                    message: error.message
+                })
+            })
+        }).catch((error) => {
             res.send({
-                message:"User account deleted successfully!"
+                message: error.message
             })
         })
     }).catch((error) => {

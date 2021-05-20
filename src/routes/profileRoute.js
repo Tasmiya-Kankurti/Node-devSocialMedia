@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 router.get('/myprofile', isLoggedIn, (req, res) => {
     Profile.findOne({userId: req.body.id}).populate('userId',['name', 'email']).then((data) => {
-        console.log(data)
+        // console.log(data)
         res.send(data)
     }).catch((error) => {
         res.send({
@@ -38,12 +38,35 @@ router.get('/profileById', (req, res) => {
 })
 
 router.post('/createprofile', isLoggedIn, (req, res) => {
-    Profile.findOne({userId: req.body.userId}).then((data) => {
+    Profile.findOne({userId: req.body.id}).then((data) => {
         if(data){
-            res.send({
-                message: "User have already created profile, you can update it..."
+            Profile.updateOne(
+                {
+                    _id: req.body.proId
+                },
+                {
+                    $set: {
+                        ...req.body
+                    }
+                }
+            ).then((data) => {
+                Profile.findOne({_id: req.body.proId}).then((value) => {
+                    if(value !== null)
+                        res.send({
+                            message: "Profile updated successfully!"
+                        })
+                }).catch((error) => {
+                    res.send({
+                        message: error.message     
+                    })
+                })
+            }).catch((error) => {
+                res.send({
+                    message: error.message
+                })
             })
         } else {
+            console.log("in create")
             const profile = new Profile({
                 userId: req.body.id,
                 career: req.body.career,
@@ -51,8 +74,8 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
                 companyWebsite: req.body.companyWebsite,
                 citystate: req.body.citystate,
                 skills: Array.isArray(req.body.skills)
-                    ? skills
-                    : skills.split(',').map((skill) => ' ' + skill.trim()),
+                    ? req.body.skills
+                    : req.body.skills.split(',').map((skill) => ' ' + skill.trim()),
                 gitName: req.body.gitName,
                 about: req.body.about,
                 social:{
@@ -80,37 +103,5 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
         })
     })
 })
-
-router.put('/updateprofile', isLoggedIn, (req, res) => {
-    Profile.updateOne(
-        {
-            _id: req.body.id
-        },
-        {
-            $set: {
-                ...req.body
-            }
-        }
-    ).then((data) => {
-        Profile.findOne({_id: req.body.id}).then((value) => {
-            console.log(value)
-            if(value !== null)
-                res.send({
-                    message: "Profile updated successfully!"
-                })
-            else
-                console.log("Hello")
-        }).catch((error) => {
-            res.send({
-                message: error.message     
-            })
-        })
-    }).catch((error) => {
-        res.send({
-            message: error.message
-        })
-    })
-})
-
 
 module.exports = router

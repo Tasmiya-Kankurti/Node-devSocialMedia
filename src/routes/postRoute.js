@@ -16,6 +16,18 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get('/postById', (req, res) => {
+    Post.findOne({_id: req.body.posId}).then((data) => {
+        // console.log(data)
+        res.send(data)
+    }).catch((error) => {
+        res.send({
+            message: error.message
+        })
+    })
+
+})
+
 router.post('/createpost', isLoggedIn, (req, res) => {
     User.findOne({_id: req.body.id}).then((data) => {
         const post = new Post({
