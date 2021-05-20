@@ -14,6 +14,29 @@ router.get('/', (req, res) => {
 
 })
 
+router.get('/myprofile', isLoggedIn, (req, res) => {
+    Profile.findOne({userId: req.body.id}).populate('userId',['name', 'email']).then((data) => {
+        console.log(data)
+        res.send(data)
+    }).catch((error) => {
+        res.send({
+            message: error.message
+        })
+    })
+
+})
+router.get('/profileById', (req, res) => {
+    Profile.findOne({userId: req.body.userId}).then((data) => {
+        console.log(data)
+        res.send(data)
+    }).catch((error) => {
+        res.send({
+            message: error.message
+        })
+    })
+
+})
+
 router.post('/createprofile', isLoggedIn, (req, res) => {
     Profile.findOne({userId: req.body.userId}).then((data) => {
         if(data){
@@ -27,14 +50,18 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
                 work: req.body.work,
                 companyWebsite: req.body.companyWebsite,
                 citystate: req.body.citystate,
-                skills: req.body.skills,
+                skills: Array.isArray(req.body.skills)
+                    ? skills
+                    : skills.split(',').map((skill) => ' ' + skill.trim()),
                 gitName: req.body.gitName,
                 about: req.body.about,
-                twitter: req.body.twitter,
-                facebook: req.body.facebook,
-                youtube: req.body.youtube,
-                linkedIn: req.body.linkedIn,
-                instagram:req.body.instagram,
+                social:{
+                    twitter: req.body.twitter,
+                    facebook: req.body.facebook,
+                    youtube: req.body.youtube,
+                    linkedIn: req.body.linkedIn,
+                    instagram:req.body.instagram,
+                }
             }) 
             profile.save().then((data) => {
                 res.send({

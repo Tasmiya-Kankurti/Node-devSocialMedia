@@ -9,6 +9,9 @@ const profile = require('./src/routes/profileRoute')
 const experience = require('./src/routes/experienceRoute')
 const education = require('./src/routes/educationRoute')
 const post = require('./src/routes/postRoute')
+const discussion = require('./src/routes/discussionRoute')
+const likes = require('./src/routes/likeRoute')
+const dislikes = require('./src/routes/dislikeRoute')
 
 const app = express()
 
@@ -31,12 +34,15 @@ app.get('/', (req, res) => {
     res.send("test")
 })
 
-app.use('/user', user)
-app.use('/auth', auth)
-app.use('/profile', profile)
-app.use('/experience', experience)
-app.use('/education', education)
-app.use('/post', post)
+app.use('/api/user', user)
+app.use('/api/auth', auth)
+app.use('/api/profile', profile)
+app.use('/api/experience', experience)
+app.use('/api/education', education)
+app.use('/api/post', post)
+app.use('/api/discussion', discussion)
+app.use('/api/likes', likes)
+app.use('/api/dislikes', dislikes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)

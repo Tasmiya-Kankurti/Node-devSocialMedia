@@ -28,8 +28,8 @@ const profileSchema = new Schema({
     },
 
     skills: {
-        type: String,
-        required: true 
+        type: [String],
+        required: true
     },
 
     gitName: {
@@ -42,29 +42,31 @@ const profileSchema = new Schema({
         required: false 
     },
 
-    twitter: {
-        type: String,
-        required: false
-    },
-
-    facebook: {
-        type: String,
-        required: false
-    },
-
-    youtube: {
-        type: String,
-        required: false 
-    },
-
-    linkedIn: {
-        type: String,
-        required: false
-    },
-
-    instagram: {
-        type: String,
-        required: false
+    social: {
+        twitter: {
+            type: String,
+            required: false
+        },
+    
+        facebook: {
+            type: String,
+            required: false
+        },
+    
+        youtube: {
+            type: String,
+            required: false 
+        },
+    
+        linkedIn: {
+            type: String,
+            required: false
+        },
+    
+        instagram: {
+            type: String,
+            required: false
+        },
     },
     experience: [
         {

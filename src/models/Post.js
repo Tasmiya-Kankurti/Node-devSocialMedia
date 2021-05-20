@@ -7,6 +7,16 @@ const postSchema = new Schema({
         ref: "user"
     },
 
+    userName: {
+        type: String,
+        requires: true
+    },
+
+    avatar: {
+        type: String,
+        requires: true
+    },
+
     text: {
         type: String,
         required: true
@@ -19,10 +29,31 @@ const postSchema = new Schema({
 
     discussion: [
         {
-            comments: {
+            userName: {
                 type: String,
-            required: true
-            }
+                requires: true
+            },
+
+            avatar: {
+                type: String,
+                requires: true
+            },
+
+            cmntUsrId: {
+                type: String,
+                requires: true
+            },
+
+            comment: {
+                type: String,
+                required: true
+            },
+
+            date: {
+                type: Date,
+                default: Date.now
+            },
+
         }
     ],
 
@@ -35,14 +66,6 @@ const postSchema = new Schema({
         }
     ],
 
-    disLikes: [
-        {
-            disLikedUser: {
-                type: Schema.Types.ObjectId,
-                required: true
-            }
-        }
-    ]
         
 
 })

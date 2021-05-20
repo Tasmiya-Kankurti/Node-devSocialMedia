@@ -3,6 +3,8 @@ const router = express.Router()
 const User = require('../models/User')
 const Profile = require('../models/Profile')
 const isLoggedIn = require('../middleware')
+const gravatar = require('gravatar')
+const normalize =require('normalize-url')
 
 router.get('/', (req, res) => {
     User.find().then((data) => {
@@ -22,11 +24,20 @@ router.post('/createuser', (req, res) => {
                 message: "User account already exists from this email!"
             })
         } else {
+            const avatar = normalize(
+                gravatar.url(req.body.email, {
+                  s: '200',
+                  r: 'pg',
+                  d: 'mm'
+                }),
+                { forceHttps: true }
+              );
+
             const user = new User({
+                avatar: avatar, 
                 name: req.body.name,
                 email: req.body.email,
-                password: req.body.password,
-                confirm: req.body.confirm
+                password: req.body.password
             })
             
             user.save().then((data) => {

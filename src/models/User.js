@@ -18,7 +18,7 @@ const userSchema = new Schema ({
         required: true
     },
 
-    confirm: {
+    avatar: {
         type: String,
         required: true
     }
