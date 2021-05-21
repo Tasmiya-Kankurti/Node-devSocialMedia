@@ -13,7 +13,8 @@ router.put('/addexperience', isLoggedIn, (req, res) => {
                 location: req.body.location,
                 fromDate: req.body.fromDate,
                 toDate: req.body.toDate,
-                jobDescription: req.body.jobDescription
+                jobDescription: req.body.jobDescription,
+                currentJob: req.body.currentJob  
             })
             data.save().then((data) => {
                 res.send({

@@ -10,7 +10,10 @@ router.put('/addeducation', isLoggedIn, (req, res) => {
             data.education.push({
                 school: req.body.school,
                 degree: req.body.degree,
-                years: req.body.years
+                fromDate: req.body.fromDate,
+                toDate: req.body.toString,
+                currentSchool: req.body.currentSchool,
+                discription: req.body.discription
             })
             data.save().then((data) => {
                 res.send({

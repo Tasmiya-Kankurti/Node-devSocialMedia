@@ -86,12 +86,12 @@ const profileSchema = new Schema({
             },
         
             fromDate: {
-                type: String,
-                required: false 
+                type: Date,
+                required: true 
             },
         
             toDate: {
-                type: String,
+                type: Date,
                 required: false 
             },
         
@@ -99,6 +99,11 @@ const profileSchema = new Schema({
                 type: String,
                 required: false
             },
+
+            currentJob: {
+                type: Boolean,
+                default: false
+            }
             
         }
     ],
@@ -116,9 +121,29 @@ const profileSchema = new Schema({
                 required: true
             },
 
-            years: {
+            field:{
                 type: String,
-                required: true
+                required: false
+            },
+
+            fromDate: {
+                type: Date,
+                required: true 
+            },
+        
+            toDate: {
+                type: Date,
+                required: false 
+            },
+
+            currentSchool: {
+                type: Boolean,
+                default: false 
+            },
+
+            description: {
+                type: String,
+                required: false 
             }
         }
     ]

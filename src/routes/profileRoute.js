@@ -62,20 +62,40 @@ router.get('/profileById/:userId', (req, res) => {
 router.post('/createprofile', isLoggedIn, (req, res) => {
     Profile.findOne({userId: req.body.id}).then((data) => {
         if(data){
+
+            const profileData = {
+                userId: req.body.id,
+                career: req.body.career,
+                work: req.body.work,
+                companyWebsite: req.body.companyWebsite,
+                citystate: req.body.citystate,
+                skills: Array.isArray(req.body.skills)
+                    ? req.body.skills
+                    : req.body.skills.split(',').map((skill) => ' ' + skill.trim()),
+                gitName: req.body.gitName,
+                about: req.body.about,
+                social:{
+                    twitter: req.body.twitter,
+                    facebook: req.body.facebook,
+                    youtube: req.body.youtube,
+                    linkedin: req.body.linkedin,
+                    instagram:req.body.instagram
+                }
+            }
+            
             Profile.updateOne(
                 {
                     _id: data._id
                 },
                 {
-                    $set: {
-                        ...req.body
-                    }
+                    $set: profileData
                 }
             ).then((data) => {
-                Profile.findOne({_id: data.id}).then((value) => {
+                Profile.findOne({userId: req.body.id}).then((value) => {
                     if(value !== null)
                         res.send({
-                            message: "Profile updated successfully!"
+                            message: "Profile updated successfully!",
+                            ...value._doc
                         })
                 }).catch((error) => {
                     res.status(500).send({
@@ -108,8 +128,8 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
                     twitter: req.body.twitter,
                     facebook: req.body.facebook,
                     youtube: req.body.youtube,
-                    linkedIn: req.body.linkedIn,
-                    instagram:req.body.instagram,
+                    linkedin: req.body.linkedin,
+                    instagram:req.body.instagram
                 }
             }) 
             profile.save().then((data) => {
