@@ -11,8 +11,10 @@ router.get('/', (req, res) => {
     User.find().then((data) => {
         res.send(data)
     }).catch((error) => {
-        res.send({
-            message: error.messge,
+        res.status(500).send({
+            error: {
+                message: error.messge,
+            }
         })
         
     })
@@ -23,8 +25,10 @@ router.get('/myaccount', isLoggedIn, (req, res) => {
         console.log(data)
         res.send(data)
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 
@@ -33,8 +37,10 @@ router.get('/myaccount', isLoggedIn, (req, res) => {
 router.post('/createuser', (req, res) => {
     User.findOne({email: req.body.email}).then((data) => {
         if(data){
-            res.send({
-                message: "User account already exists from this email!"
+            res.status(403).send({
+                error: {
+                    message: "User account already exists from this email!"
+                }
             })
         } else {
             const avatar = normalize(
@@ -59,8 +65,10 @@ router.post('/createuser', (req, res) => {
                     ...data._doc
                 })
             }).catch((error) => {
-                res.send({
-                    message: error.message
+                res.status(500).send({
+                    error: {
+                        message: error.message
+                    }
                 })
             })
         }
@@ -77,18 +85,24 @@ router.delete('/deleteuser', isLoggedIn, (req, res) => {
                     message:"User account deleted successfully!"
                 })
             }).catch((error) => {
-                res.send({
-                    message: error.message
+                res.status(500).send({
+                    error: {
+                        message: error.message
+                    }
                 })
             })
         }).catch((error) => {
-            res.send({
-                message: error.message
+            res.status(500).send({
+                error: {
+                    message: error.message
+                }
             })
         })
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 })
@@ -106,11 +120,15 @@ router.put('/forgetpassword', (req,res) => {
         }
     ).then((data) => {
         res.send({
-            message: "Password updated successfully!"
+            error: {
+                message: "Password updated successfully!"
+            }
         })
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 })

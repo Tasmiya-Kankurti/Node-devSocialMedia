@@ -8,9 +8,11 @@ const User = require('../models/User')
 router.get('/', (req, res) => {
     Post.find().then((data) => {
         res.send(data)
-    }).catch((eror) => {
-        res.send({
-            message: error.messge,
+    }).catch((error) => {
+        res.status(500).send({
+            error: {
+                message: error.messge,
+            }
         })
         
     })
@@ -21,8 +23,10 @@ router.get('/postById', (req, res) => {
         // console.log(data)
         res.send(data)
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message   
+            }
         })
     })
 
@@ -42,13 +46,17 @@ router.post('/createpost', isLoggedIn, (req, res) => {
                 ...data._doc
             })
         }).catch((error) => {
-            res.send({
-                message: error.message
+            res.status(500).send({
+                error: {
+                    message: error.message
+                }
             })
         })
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 })
@@ -60,13 +68,17 @@ router.delete('/deletepost', isLoggedIn, (req, res) => {
                 message:"Post deleted successfully!"
             })
         } else {
-            res.send({
-                message:"Wrong user ID!"
+            res.status(401).send({
+                error: {
+                    message:"Wrong user ID!"
+                }
             })
         }
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 })

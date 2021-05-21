@@ -19,14 +19,18 @@ router.get('/', (req, res) => {
                 ...data._doc
             })
         } else {
-            res.send({
-                message: "Wrong email and password!"
+            res.status(401).send({
+                error:{
+                    message: "Wrong email and password!"
+                }
             })
         }
     }).catch((error) => {
         // console.log("error")
-        res.send({
-            message: error.message,
+        res.status(500).send({
+            error:{
+                message: error.message
+            }
         })
     })
 })

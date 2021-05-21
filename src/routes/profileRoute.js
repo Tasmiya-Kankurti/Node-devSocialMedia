@@ -7,8 +7,10 @@ router.get('/', (req, res) => {
     Profile.find().then((data) => {
         res.send(data)
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 
@@ -16,11 +18,21 @@ router.get('/', (req, res) => {
 
 router.get('/myprofile', isLoggedIn, (req, res) => {
     Profile.findOne({userId: req.body.id}).populate('userId',['name', 'email']).then((data) => {
+        if(data)
+            res.send(data)
+        else{
+            res.status(400).send({
+                error:{
+                message: "There is No profile Available"
+                }
+                })
+        }
         // console.log(data)
-        res.send(data)
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 
@@ -30,8 +42,10 @@ router.get('/profileById', (req, res) => {
         console.log(data)
         res.send(data)
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 
@@ -56,13 +70,17 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
                             message: "Profile updated successfully!"
                         })
                 }).catch((error) => {
-                    res.send({
-                        message: error.message     
+                    res.status(500).send({
+                        error: {
+                            message: error.message
+                        }     
                     })
                 })
             }).catch((error) => {
-                res.send({
-                    message: error.message
+                res.status(500).send({
+                    error: {
+                        message: error.message
+                    }
                 })
             })
         } else {
@@ -92,14 +110,18 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
                     ...data._doc
                 })
             }).catch((error) => {
-                res.send({
-                    message: error.message
+                res.status(500).send({
+                    error: {
+                        message: error.message
+                    }
                 })
             })
         }
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 })

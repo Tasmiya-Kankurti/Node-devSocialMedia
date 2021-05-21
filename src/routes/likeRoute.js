@@ -25,8 +25,10 @@ router.put('/addlike', isLoggedIn, (req, res) => {
                         ...data._doc
                     } )
                 }).catch((error) => {
-                    res.send({
-                        message: error.message
+                    res.status(500).send({
+                        error: {
+                            message: error.message
+                        }
                     })
                 })
             } else {
@@ -36,13 +38,17 @@ router.put('/addlike', isLoggedIn, (req, res) => {
                 })    
             }
         } else {
-            res.send({
-                message: "Wrong post ID!"
+            res.status(400).send({
+                error:{
+                    message: "Wrong post ID!"
+                }
             })
         }
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message   
+            }
         })
     })
 })
@@ -66,24 +72,33 @@ router.delete('/deletelike', isLoggedIn, (req, res) => {
                         ...data._doc
                     })
                 } else {
-                    res.send({
-                        message: "wrong liked user or wrong like Id!"
+                    res.status(401).send({
+                        error: {
+                            message: "wrong liked user or wrong like Id!"
+                        }
                     })
                 }
             }).catch((error) => {
-                res.send({
-                    message: error.message
+                res.status(500).send({
+                    error: {
+                        message: error.message
+                    }
                 })
             })
         } else {
-            res.send( " no")
+            res.status(400).send({
+                error: {
+                    message: "Wrong Post  Id!"
+                }
+            })
         }
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 })
-
 
 module.exports = router

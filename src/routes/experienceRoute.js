@@ -21,18 +21,24 @@ router.put('/addexperience', isLoggedIn, (req, res) => {
                     ...data._doc
                 } )
             }).catch((error) => {
-                res.send({
-                    message: error.message
+                res.status(500).send({
+                    error:{
+                        message: error.message
+                    }
                 })
             })
         } else {
-            res.send({
-                message: "Wrong user ID!"
+            res.status(401).send({
+                error: {
+                    message: "Wrong user ID!"
+                }
             })
         }
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error: {
+                message: error.message
+            }
         })
     })
 })
@@ -62,19 +68,25 @@ router.delete('/deleteexperience', isLoggedIn, (req, res) => {
                     ...data._doc
                 })
             }).catch((error) => {
-                res.send({
-                    message: error.message
+                res.status(500).send({
+                    error: {
+                        message: error.message
+                    }
                 })
             })
 
         } else {
-            res.send({
-                message:"Wrong user ID!"
+            res.status(401).send({
+                error: {
+                    message:"Wrong user ID!"
+                }
             })
         }
     }).catch((error) => {
-        res.send({
-            message: error.message
+        res.status(500).send({
+            error:{
+                message: error.message
+            }
         })
     })
 })
