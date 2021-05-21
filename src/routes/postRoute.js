@@ -18,10 +18,18 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/postById', (req, res) => {
-    Post.findOne({_id: req.body.posId}).then((data) => {
-        // console.log(data)
-        res.send(data)
+router.get('/postById/:posId', (req, res) => {
+    Post.findOne({_id: req.params.posId}).then((data) => {
+        if(data){
+            // console.log(data)
+            res.send(data)
+        } else {
+            res.status(400).send({
+                error: {
+                    message: "There is No profile Available"
+                }
+            })
+        }
     }).catch((error) => {
         res.status(500).send({
             error: {

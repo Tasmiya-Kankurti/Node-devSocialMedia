@@ -4,7 +4,7 @@ const Profile = require('../models/Profile')
 const isLoggedIn = require('../middleware')
 
 router.get('/', (req, res) => {
-    Profile.find().then((data) => {
+    Profile.find().populate('userId',['name', 'email','avatar']).then((data) => {
         res.send(data)
     }).catch((error) => {
         res.status(500).send({
@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/myprofile', isLoggedIn, (req, res) => {
-    Profile.findOne({userId: req.body.id}).populate('userId',['name', 'email']).then((data) => {
+    Profile.findOne({userId: req.body.id}).populate('userId',['name', 'email','avatar']).then((data) => {
         if(data)
             res.send(data)
         else{
@@ -37,10 +37,18 @@ router.get('/myprofile', isLoggedIn, (req, res) => {
     })
 
 })
-router.get('/profileById', (req, res) => {
-    Profile.findOne({userId: req.body.userId}).then((data) => {
-        console.log(data)
-        res.send(data)
+router.get('/profileById/:userId', (req, res) => {
+    Profile.findOne({userId: req.params.userId}).populate('userId',['name', 'email','avatar']).then((data) => {
+        if(data){
+            // console.log(data)
+            res.send(data)
+        } else {
+            res.status(400).send({
+                error: {
+                    message: "There is No profile Available"
+                }
+            })
+        }
     }).catch((error) => {
         res.status(500).send({
             error: {
@@ -56,7 +64,7 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
         if(data){
             Profile.updateOne(
                 {
-                    _id: req.body.proId
+                    _id: data._id
                 },
                 {
                     $set: {
@@ -64,7 +72,7 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
                     }
                 }
             ).then((data) => {
-                Profile.findOne({_id: req.body.proId}).then((value) => {
+                Profile.findOne({_id: data.id}).then((value) => {
                     if(value !== null)
                         res.send({
                             message: "Profile updated successfully!"
@@ -84,7 +92,7 @@ router.post('/createprofile', isLoggedIn, (req, res) => {
                 })
             })
         } else {
-            console.log("in create")
+            // console.log("in create")
             const profile = new Profile({
                 userId: req.body.id,
                 career: req.body.career,

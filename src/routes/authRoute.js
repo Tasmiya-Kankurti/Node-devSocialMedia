@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const jwtSecret = require('../../config/').jwtSecret
 const User = require('../models/User')
 
-router.get('/', (req, res) => {
+router.post('/', (req, res) => {
     // console.log(jwtSecret)
     User.findOne({email: req.body.email, password: req.body.password}).then((data) => {
         if(data){
