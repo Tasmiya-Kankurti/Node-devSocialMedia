@@ -5,13 +5,14 @@ const isLoggedIn = require('../middleware')
 const user = require('../models/User')
 
 router.put('/addeducation', isLoggedIn, (req, res) => {
-    Profile.findOne({userId: req.body.userId}).then((data) => {
+    Profile.findOne({userId: req.body.id}).then((data) => {
         if(data){
             data.education.push({
                 school: req.body.school,
                 degree: req.body.degree,
+                field: req.body.field,
                 fromDate: req.body.fromDate,
-                toDate: req.body.toString,
+                toDate: req.body.toDate,
                 currentSchool: req.body.currentSchool,
                 discription: req.body.discription
             })
@@ -44,12 +45,12 @@ router.put('/addeducation', isLoggedIn, (req, res) => {
 })
 
 
-router.delete('/deleteeducation', isLoggedIn, (req, res) => {
-    Profile.findOne({userId: req.body.userId}).then((data) => {
+router.delete('/deleteeducation/:eduId', isLoggedIn, (req, res) => {
+    Profile.findOne({userId: req.body.id}).then((data) => {
         if(data){
             
             data.education = data.education.filter((education) => {
-                return req.body.eduId !== education._id.toString() 
+                return req.params.eduId !== education._id.toString() 
             })
 
             data.save().then((data) => {

@@ -50,12 +50,12 @@ router.put('/addcomment', isLoggedIn, (req, res) => {
 })
 
 
-router.delete('/deletecomment', isLoggedIn, (req, res) => {
-    Post.findOne({_id: req.body.posId}).then((data) => {
+router.delete('/deletecomment/:posId/:disId', isLoggedIn, (req, res) => {
+    Post.findOne({_id: req.params.posId}).then((data) => {
         if(data){
             var flag =0 
             data.discussion.map((tracePost,i) => {
-                if(req.body.disId === tracePost._id.toString() && req.body.id === tracePost.cmntUsrId.toString()){
+                if(req.params.disId === tracePost._id.toString() && req.body.id === tracePost.cmntUsrId.toString()){
                     // console.log("Inside if ")
                     flag=1
                     data.discussion.splice(i, 1); 

@@ -10,11 +10,12 @@ router.put('/addlike', isLoggedIn, (req, res) => {
             var flag=0
             data.likes.map((traceUser,i) => {
                 // console.log("tracer: "+traceUser)
-                if(req.body.likedUser === traceUser.likedUser.toString()){
+                if(req.body.id === traceUser.likedUser.toString()){
                     // console.log("Inside if ")
                     flag=1
                 }
             })
+
             if(flag === 0){
                 data.likes.push({
                     likedUser: req.body.id
@@ -54,30 +55,23 @@ router.put('/addlike', isLoggedIn, (req, res) => {
 })
 
 
-router.delete('/deletelike', isLoggedIn, (req, res) => {
+router.put('/deletelike', isLoggedIn, (req, res) => {
     Post.findOne({_id: req.body.posId}).then((data) => {
         if(data){
             var flag =0 
             data.likes.map((traceLikes,i) => {
-                if(req.body.likId === traceLikes._id.toString() && req.body.id === traceLikes.likedUser.toString()){
-                    // console.log("Inside if ")
-                    flag=1
+                if(req.body.id === traceLikes.likedUser.toString()){
                     data.likes.splice(i, 1); 
+                    
                 }     
             })
+
             data.save().then((data) => {
-                if( flag ===1 ){
-                    res.send({
-                        message: "Like deleted successfully!",
-                        ...data._doc
-                    })
-                } else {
-                    res.status(401).send({
-                        error: {
-                            message: "wrong liked user or wrong like Id!"
-                        }
-                    })
-                }
+                res.send({
+                    message: "Like deleted successfully!",
+                    ...data._doc
+                })
+                 
             }).catch((error) => {
                 res.status(500).send({
                     error: {
@@ -85,6 +79,7 @@ router.delete('/deletelike', isLoggedIn, (req, res) => {
                     }
                 })
             })
+           
         } else {
             res.status(400).send({
                 error: {

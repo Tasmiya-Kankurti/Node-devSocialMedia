@@ -5,8 +5,10 @@ const isLoggedIn = (req, res, next) => {
     const token = req.headers['x-access-token']
 
     if(!token){
-        res.send({
-            message: "Wrong access token!"
+        res.status(401).send({
+            error: {
+                message: "Wrong access token!"
+            }
         })
     }
 
@@ -17,8 +19,10 @@ const isLoggedIn = (req, res, next) => {
             next()
         }
         catch(error) {
-            res.send({
-                message: error.message
+            res.status(500).send({
+                error: {
+                    message: error.message
+                }
             })
         }
     }   

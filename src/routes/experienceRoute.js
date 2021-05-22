@@ -5,7 +5,7 @@ const isLoggedIn = require('../middleware')
 const user = require('../models/User')
 
 router.put('/addexperience', isLoggedIn, (req, res) => {
-    Profile.findOne({userId: req.body.userId}).then((data) => {
+    Profile.findOne({userId: req.body.id}).then((data) => {
         if(data){
             data.experience.push({
                 jobTitle: req.body.jobTitle,
@@ -45,8 +45,8 @@ router.put('/addexperience', isLoggedIn, (req, res) => {
 })
 
 
-router.delete('/deleteexperience', isLoggedIn, (req, res) => {
-    Profile.findOne({userId: req.body.userId}).then((data) => {
+router.delete('/deleteexperience/:expId', isLoggedIn, (req, res) => {
+    Profile.findOne({userId: req.body.id}).then((data) => {
         if(data){
             // console.log("expID: "+req.body.expId)
             // data.experience.map((traceUser,i) => {
@@ -60,7 +60,7 @@ router.delete('/deleteexperience', isLoggedIn, (req, res) => {
             // })
 
             data.experience = data.experience.filter((experience) => {
-                return req.body.expId !== experience._id.toString() 
+                return req.params.expId !== experience._id.toString() 
             })
 
             data.save().then((data) => {

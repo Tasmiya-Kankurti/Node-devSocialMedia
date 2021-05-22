@@ -69,9 +69,10 @@ router.post('/createpost', isLoggedIn, (req, res) => {
     })
 })
 
-router.delete('/deletepost', isLoggedIn, (req, res) => {
-    Post.remove({_id: req.body.posId, userId: req.body.id}).then((data) => {
-        if(data.deleteCount === 0) {
+router.delete('/deletepost/:posId', isLoggedIn, (req, res) => {
+    Post.remove({_id: req.params.posId, userId: req.body.id}).then((data) => {
+        // console.log(data)
+        if(data.deletedCount !== 0) {
             res.send({
                 message:"Post deleted successfully!"
             })
